@@ -1,6 +1,6 @@
 # php-tools
 
-## Set of commonly used php 8/8.1 tools: psalm, codestyle fixer, phpdoc, ...
+## Set of commonly used php `7.4` / `8.0` / `8.1` tools: psalm, codestyle fixer, phpdoc, ...
 
 provide scripts to INSTALL and UPDATE (all tools or specific ones)
 
@@ -32,3 +32,8 @@ after `install` *choose **one** method out of*:
 * wget
 * composer
 * git
+
+
+## php 7.4 compatibility note
+as of this moment all provided tools are compatible
+
