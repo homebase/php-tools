@@ -1,0 +1,3 @@
+wget -O bin/phpDocumentor.phar https://phpdoc.org/phpDocumentor.phar
+chmod +x bin/phpDocumentor.phar
+bin/phpDocumentor.phar --version

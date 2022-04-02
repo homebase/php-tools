@@ -1,0 +1,4 @@
+mkdir --parents tools/phpstan
+composer require --working-dir=tools/phpstan --dev phpstan/phpstan
+ln -sf ../tools/phpstan/vendor/bin/phpstan bin
+./bin/phpstan --version

@@ -1,0 +1,6 @@
+#!/bin/sh
+cd tools
+rm -rf spartan-test-legacy
+git clone --branch V1 https://github.com/parf/spartan-test spartan-test-legacy
+cd ..
+ln -sf ../tools/spartan-test-legacy/spartan-test bin

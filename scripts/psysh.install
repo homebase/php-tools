@@ -1,0 +1,3 @@
+wget -O bin/psysh https://psysh.org/psysh
+chmod +x bin/psysh
+./bin/psysh --version

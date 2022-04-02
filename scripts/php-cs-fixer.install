@@ -1,0 +1,4 @@
+mkdir --parents tools/php-cs-fixer
+composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer
+ln -sf ../tools/php-cs-fixer/vendor/bin/php-cs-fixer bin
+

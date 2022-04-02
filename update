@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# bold+cyan+on_orange
+highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
+normal=$(tput sgr0)
+
+if [ $# -eq 0 ]; then
+    echo 'specify "all" or specific package to update:'
+    echo
+    echo installed packages:
+    ls installed | sed "s/^/+ /"
+    exit 1
+fi
+
+
+what=$1
+
+if [ "$1" == "all" ]; then
+    for file in installed/*
+    do
+        what=$(echo $file | sed "s/^installed.//" )
+        ./update $what
+    done
+    exit
+fi
+
+if [ ! -f scripts/$what.install ]; then
+    echo "unknown package '$what'"
+    exit 1
+fi
+
+if [ -f scripts/$what.update ]; then
+  echo "*** updating $highlight $what $normal"
+  sh -x scripts/$what.update
+else
+  echo "*** re-installing $highlight $what $normal"
+  sh -x scripts/$what.install
+fi
+date > installed/$what

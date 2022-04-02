@@ -1,0 +1,3 @@
+wget -O bin/psalm.phar https://github.com/vimeo/psalm/releases/latest/download/psalm.phar
+chmod +x bin/psalm.phar
+./bin/psalm.phar --version

@@ -1,0 +1,4 @@
+#!/bin/sh
+wget -O bin/phpunit https://phar.phpunit.de/phpunit-9.phar
+chmod +x bin/phpunit
+./bin/phpunit --version

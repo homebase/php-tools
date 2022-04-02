@@ -1,0 +1,7 @@
+#!/bin/sh
+cd tools
+rm -rf spartan-test
+git clone https://github.com/parf/spartan-test
+cd ..
+ln -sf ../tools/spartan-test/bin/stest bin
+ln -sf ../tools/spartan-test/bin/stest-all bin

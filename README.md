@@ -19,7 +19,7 @@ scripts to INSTALL and UPDATE (all tools or specific ones)
 ## Scripts
 * install all             - install ALL
 * install $TOOL           - install specific tool
-* update                  - update installed packages
+* update  all             - update installed packages
 * update  $TOOL           - update specific tool
 * create-symlinks-local   - create tools symlinks in ~/bin
 * create-symlinks-global  - run-as-root: create tools symlinks /usr/local/bin

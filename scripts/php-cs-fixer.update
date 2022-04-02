@@ -1,0 +1,1 @@
+composer update --working-dir=tools/php-cs-fixer

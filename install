@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# bold+cyan+on_orange
+highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
+normal=$(tput sgr0)
+
+mkdir -p bin tools installed
+
+if [ $# -eq 0 ]; then
+    echo 'specify "all" or specific package to install:'
+    echo
+    echo installed packages:
+    ls installed | sed "s/^/+ /"
+    echo
+    echo available packages:
+    ls scripts/*.install | sed "s/scripts./- /" | sed "s/.install$//"
+    echo
+    exit 1
+fi
+
+
+what=$1
+
+if [ "$1" == "all" ]; then
+    for file in scripts/*.install
+    do
+        what=$(echo $file | sed "s/scripts.//" | sed "s/.install$//")
+        if [ -f installed/$what ]; then
+            echo "*** already installed: $what"
+        else
+            echo
+            ./install $what
+        fi
+    done
+    exit
+fi
+
+if [ ! -f scripts/$what.install ]; then
+    echo "unknown package '$what'"
+    exit 1
+fi
+
+echo "*** installing $highlight $what $normal"
+sh -x scripts/$what.install
+date > installed/$what
