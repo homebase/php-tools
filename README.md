@@ -3,7 +3,7 @@
 ## Set of commonly used php tools: psalm, codestyle fixer, phpdoc, ...
 so far compatible with php 7.4, php 8.0, php 8.1
 
-provide scripts to INSTALL and UPDATE (all tools or specific ones)
+Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 
 **it is always a good idea to keep your tools and their dependencies in a separate place from your apps**
 
