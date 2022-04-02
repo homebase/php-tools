@@ -1,6 +1,7 @@
 # php-tools
 
-## Set of commonly used php `7.4` / `8.0` / `8.1` tools: psalm, codestyle fixer, phpdoc, ...
+## Set of commonly used php tools: psalm, codestyle fixer, phpdoc, ...
+so far compatible with php 7.4, php 8.0, php 8.1
 
 provide scripts to INSTALL and UPDATE (all tools or specific ones)
 
