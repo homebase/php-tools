@@ -23,7 +23,8 @@ provide scripts to INSTALL and UPDATE (all tools or specific ones)
 * `update  all`             - update installed packages
 * `update  $TOOL`           - update specific tool
 
-after `install` add checked out `bin` directory to your PATH **or** RUN one of this scripts:
+after `install` *choose one method out of*:
+* add checked out `bin` directory to your PATH
 * `create-symlinks-local`   - create tools symlinks in ~/bin (your home directory)
 * `create-symlinks-global`  - create tools symlinks in /usr/local/bin
 
