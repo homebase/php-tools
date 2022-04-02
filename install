@@ -7,17 +7,19 @@ normal=$(tput sgr0)
 mkdir -p bin tools installed
 
 if [ $# -eq 0 ]; then
-    echo 'specify "all" or specific package to install:'
+    echo 'specify "all" or choose a specific package to install / re-install'
     echo
-    echo installed packages:
-    ls installed | sed "s/^/+ /"
-    echo
-    echo available packages:
-    ls scripts/*.install | sed "s/scripts./- /" | sed "s/.install$//"
-    echo
+    for file in scripts/*.install
+    do
+        what=$(echo $file | sed "s/scripts.//" | sed "s/.install$//")
+        if [ -f installed/$what ]; then
+            echo "- $highlight $what $normal - already installed"
+        else
+            echo "- $highlight $what $normal"
+        fi
+    done
     exit 1
 fi
-
 
 what=$1
 
