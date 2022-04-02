@@ -1,0 +1,13 @@
+#!/bin/sh -x
+
+#
+# place symlinks to ~/bin
+# will not overwrite existing ones
+#
+
+pwd=$(pwd)
+mkdir -p ~/bin
+for file in bin/*
+do
+  ln -s $pwd/$file ~/bin
+done

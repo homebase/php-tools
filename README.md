@@ -32,5 +32,18 @@ Actual install/update scripts kept in scripts directory
 
 
 
+# How to Use / Install
+* checkout this repo somewhere:
+  - for local install: `~/src`
+  - for global(all users) install: `/usr/local/src`
+* run "./install all"
+  - if you want specific packages, run `./install` to see available packages ; then `./install package_name`
+
+## Making all tools available anywhere:
+
+  - Option 1: add `bin` directory to path
+  - Option 2: run `create-symlinks-local` - this will create symlinks in your "~/bin" directory
+  - Option 3: run `create-symlinks-global` - this will create symlinks in `/usr/local/bin`
+
 ### PS:
  required tools: wget, composer, git

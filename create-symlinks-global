@@ -1,0 +1,18 @@
+#!/bin/sh -x
+
+#
+# place symlinks to /usr/local/bin
+# will not overwrite existing ones
+#
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+pwd=$(pwd)
+mkdir -p /usr/local/bin
+for file in bin/*
+do
+  ln -s $pwd/$file /usr/local/bin
+done
