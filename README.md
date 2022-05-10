@@ -38,3 +38,5 @@ after `install` *choose **one** method out of*:
 ## php 7.4 compatibility note
 as of this moment all provided tools are compatible
 
+## See Also
+ please check [parf/composer-php8-template](https://github.com/parf/composer-php8-template) project that provides default configs for above tools
