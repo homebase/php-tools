@@ -17,6 +17,16 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 * `spartan-test`
 * `spartan-test (legacy)`
 
+## INSTALL
+```
+mkdir -p ~/src
+cd ~/src
+git checkout https://github.com/homebase/php-tools.git
+cd php-tools
+./install all
+./create-symlinks-local
+```
+
 ## How to Use
 * `install`                 - get help, list of available packages
 * `install all`             - install ALL
