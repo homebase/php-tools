@@ -27,6 +27,9 @@ cd php-tools
 ./create-symlinks-local
 ```
 
+## UPDATE all installed packages
+`bin/update-all-php-tools`
+
 ## How to Use
 * `install`                 - get help, list of available packages
 * `install all`             - install ALL
