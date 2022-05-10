@@ -8,12 +8,13 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 **it is always a good idea to keep your tools and their dependencies in a separate place from your apps**
 
 ## Provided Tools:
-* `phpstan`
 * `psalm`
+* `phpstan`
 * `rector`
 * `phpDocumentor`
 * `php-cs-fixer`
 * `php-unit`
+* `psysh`
 * `spartan-test`
 * `spartan-test (legacy)`
 
