@@ -8,14 +8,14 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 **it is always a good idea to keep your tools and their dependencies in a separate place from your apps**
 
 ## Provided Tools:
-* `psalm`
-* `phpstan`
-* `rector`
-* `phpDocumentor`
-* `php-cs-fixer`
-* `php-unit`
-* `psysh`
-* `spartan-test`
+* [psalm](https://psalm.dev/docs/annotating_code/supported_annotations/)
+* [php-stan](https://phpstan.org/writing-php-code/phpdocs-basics)
+* [rector](https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md)
+* [phpDocumentor](https://docs.phpdoc.org/3.0/guide/guides/running-phpdocumentor.html#quickstart)
+* [php-cs-fixer](https://mlocati.github.io/php-cs-fixer-configurator/#version:3.8)
+* [php-unit](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html)
+* [psysh](https://developpaper.com/psysh-php-interactive-console/)
+* [spartan-test](https://github.com/parf/spartan-test)
 * `spartan-test (legacy)`
 
 ## INSTALL
