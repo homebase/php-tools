@@ -22,7 +22,7 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 ```
 mkdir -p ~/src
 cd ~/src
-git checkout https://github.com/homebase/php-tools.git
+git clone https://github.com/homebase/php-tools.git
 cd php-tools
 ./install all
 ./create-symlinks-local
