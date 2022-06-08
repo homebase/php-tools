@@ -4,6 +4,19 @@
 highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
 normal=$(tput sgr0)
 
+if ! [ -x "$(command -v git)" ]; then
+  echo 'Error: git is not installed.' >&2
+  exit 1
+fi	
+if ! [ -x "$(command -v wget)" ]; then
+  echo 'Error: wget is not installed.' >&2
+  exit 1
+fi	
+if ! [ -x "$(command -v composer)" ]; then
+  echo 'Error: composer is not installed.' >&2
+  exit 1
+fi	
+
 mkdir -p bin tools installed
 
 if [ $# -eq 0 ]; then
