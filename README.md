@@ -18,7 +18,7 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 * [spartan-test](https://github.com/parf/spartan-test)
 * `spartan-test (legacy)`
 
-## INSTALL
+## INSTALL (LOCAL)
 ```
 mkdir -p ~/src
 cd ~/src
@@ -27,6 +27,18 @@ cd php-tools
 ./install all
 ./create-symlinks-local
 ```
+
+## INSTALL (GLOBAL)
+```
+sudo mkdir -p /usr/local/src/php-tools
+cd /usr/local/src
+sudo chown $USER /usr/local/src/php-tools
+git clone https://github.com/homebase/php-tools.git
+cd php-tools
+./install all
+./create-symlinks-global
+```
+
 
 ## UPDATE all installed packages
 `bin/update-all-php-tools`
