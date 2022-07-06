@@ -36,7 +36,7 @@ sudo chown $USER /usr/local/src/php-tools
 git clone https://github.com/homebase/php-tools.git
 cd php-tools
 ./install all
-./create-symlinks-global
+sudo ./create-symlinks-global
 ```
 
 
