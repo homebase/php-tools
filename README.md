@@ -41,7 +41,9 @@ sudo ./create-symlinks-global
 
 
 ## UPDATE all installed packages
-`bin/update-all-php-tools`
+`~/bin/update-all-php-tools`
+or
+`/usr/local/bin/update-all-php-tools`
 
 ## How to Use
 * `install`                 - get help, list of available packages
