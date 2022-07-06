@@ -45,7 +45,7 @@ sudo ./create-symlinks-global
 or
 `/usr/local/bin/update-all-php-tools`
 
-## How to Use
+## Advanced use - install some packages / update specific ones
 * `install`                 - get help, list of available packages
 * `install all`             - install ALL
 * `install $TOOL`           - install specific tool
