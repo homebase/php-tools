@@ -1,6 +1,5 @@
 #!/bin/sh
-cd "$(dirname "$0")"
-CWD=$(readlink -f $(pwd))
-cd $CWD
+F=$(readlink -f "$0")
+cd "$(dirname "$F")"
 cd ..
 ./update all
