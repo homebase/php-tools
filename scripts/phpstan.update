@@ -1,1 +1,1 @@
-composer update --working-dir=tools/phpstan
+bin/composer update --working-dir=tools/phpstan

@@ -1,0 +1,3 @@
+wget https://getcomposer.org/download/latest-stable/composer.phar -O bin/composer
+chmod +x bin/composer
+./bin/composer --version

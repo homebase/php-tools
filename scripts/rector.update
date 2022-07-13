@@ -1,1 +1,1 @@
-composer update --working-dir=tools/rector 
+bin/composer update --working-dir=tools/rector 

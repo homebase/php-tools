@@ -1,4 +1,4 @@
 mkdir --parents tools/rector
-composer require --working-dir=tools/rector rector/rector --dev
+bin/composer require --working-dir=tools/rector rector/rector --dev
 ln -sf ../tools/rector/vendor/bin/rector bin
 ./bin/rector --version
