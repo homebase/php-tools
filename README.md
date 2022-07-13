@@ -8,7 +8,7 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 **it is always a good idea to keep your tools and their dependencies in a separate place from your apps**
 
 ## Provided Tools:
-* [composer] (https://getcomposer.org/download/)
+* [composer](https://getcomposer.org/download/)
 * [psalm](https://psalm.dev/docs/annotating_code/supported_annotations/)
 * [php-stan](https://phpstan.org/writing-php-code/phpdocs-basics)
 * [rector](https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md)
