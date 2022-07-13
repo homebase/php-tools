@@ -16,8 +16,8 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 * [php-cs-fixer](https://mlocati.github.io/php-cs-fixer-configurator/#version:3.8)
 * [php-unit](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html)
 * [psysh](https://developpaper.com/psysh-php-interactive-console/)
-* [spartan-test](https://github.com/parf/spartan-test)
-* [spartan-test V1](https://github.com/parf/spartan-test/tree/V1)
+* [spartan-test (mainline)](https://github.com/parf/spartan-test)
+* [spartan-test (legacy)](https://github.com/parf/spartan-test/tree/V1)
 
 ## INSTALL (LOCAL)
 ```
