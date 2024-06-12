@@ -1,5 +1,8 @@
 #!/bin/sh
 
+F=$(readlink -f "$0")
+cd "$(dirname "$F")"
+
 # bold+cyan+on_orange
 highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
 normal=$(tput sgr0)
