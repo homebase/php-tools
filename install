@@ -21,6 +21,13 @@ fi
 #  exit 1
 #fi	
 
+if [ ! -w . ]; then
+   echo Error: Write Permission Denied
+   echo Option 1: run from root: $highlight sudo $0 $* $normal
+   echo Option 2: change file ownership: $highlight sudo chown -R $USER $(dirname "$F") $normal, then run update command again
+   exit 1
+fi
+
 if [ ! -f bin/composer ]; then
    sh ./scripts/composer.install
 fi

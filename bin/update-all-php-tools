@@ -2,4 +2,7 @@
 F=$(readlink -f "$0")
 cd "$(dirname "$F")"
 cd ..
-./update all
+
+what="${1:-all}"
+
+./update $what
