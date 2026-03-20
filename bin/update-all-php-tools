@@ -1,8 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo 'Error: this script must be run with bash.' >&2
+  exit 1
+fi
+
 F=$(readlink -f "$0")
 cd "$(dirname "$F")"
 cd ..
 
 what="${1:-all}"
 
-./update $what
+./update "$what"
