@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 F=$(readlink -f "$0")
 cd "$(dirname "$F")"
@@ -29,7 +29,7 @@ if [ ! -w . ]; then
 fi
 
 if [ ! -f bin/composer ]; then
-   sh ./scripts/composer.install
+   bash ./scripts/composer.install
 fi
 
 mkdir -p bin tools installed
@@ -71,5 +71,5 @@ if [ ! -f scripts/$what.install ]; then
 fi
 
 echo "*** installing $highlight $what $normal"
-sh -x scripts/$what.install
+bash -x scripts/$what.install
 date > installed/$what
