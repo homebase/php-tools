@@ -43,7 +43,7 @@ sudo mkdir -p /usr/local/src/php-tools
 sudo chown "$USER" /usr/local/src/php-tools
 git clone https://github.com/homebase/php-tools.git /usr/local/src/php-tools
 cd /usr/local/src/php-tools
-./php-tools install all
+sudo USER="$USER" ./php-tools install all
 ```
 
 ↳ This is the setup to use when you want one shared install for the machine.
