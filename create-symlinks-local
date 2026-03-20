@@ -21,3 +21,4 @@ for file in bin/*
 do
   ln -s "$repo_dir/$file" ~/bin
 done
+ln -s "$repo_dir/php-tools" ~/bin

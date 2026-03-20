@@ -1,0 +1,321 @@
+#!/usr/bin/env bash
+
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo 'Error: this script must be run with bash.' >&2
+  exit 1
+fi
+
+F=$(readlink -f "$0")
+cd "$(dirname "$F")"
+repo_dir=$(pwd)
+
+# bold+cyan+on_orange
+highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
+normal=$(tput sgr0)
+
+require_command() {
+  local name=$1
+  if ! [ -x "$(command -v "$name")" ]; then
+    echo "Error: $name is not installed." >&2
+    exit 1
+  fi
+}
+
+require_writable_repo() {
+  if [ ! -w . ]; then
+    echo Error: Write Permission Denied
+    echo "Option 1: run from root: ${highlight}sudo \"$0\" $* ${normal}"
+    echo "Option 2: change file ownership: ${highlight}sudo chown -R ${USER:-$LOGNAME} \"$repo_dir\" ${normal}, then run the command again"
+    exit 1
+  fi
+}
+
+require_local_composer() {
+  if [ ! -x bin/composer ]; then
+    echo 'Error: bin/composer is missing. Run ./php-tools install composer first.' >&2
+    exit 1
+  fi
+}
+
+ensure_runtime_dirs() {
+  mkdir -p bin tools installed
+}
+
+list_available_tools() {
+  local file what
+  for file in scripts/*.install
+  do
+    what=${file#scripts/}
+    what=${what%.install}
+    echo "$what"
+  done
+}
+
+tool_exists() {
+  [ -f "scripts/$1.install" ]
+}
+
+ensure_tool_exists() {
+  if ! tool_exists "$1"; then
+    echo "unknown tool '$1'"
+    exit 1
+  fi
+}
+
+bootstrap_composer_if_needed() {
+  if [ ! -f bin/composer ]; then
+    bash ./scripts/composer.install
+  fi
+}
+
+list_tools() {
+  local what
+  echo 'available tools:'
+  echo
+  while IFS= read -r what
+  do
+    if [ -f "installed/$what" ]; then
+      echo "- $highlight $what $normal - installed"
+    else
+      echo "- $highlight $what $normal"
+    fi
+  done < <(list_available_tools)
+}
+
+check_update_dependencies() {
+  case "$1" in
+    self)
+      require_command git
+      ;;
+    composer|php-cs-fixer|phpstan|rector)
+      require_local_composer
+      ;;
+    spartan-test)
+      require_command git
+      ;;
+  esac
+}
+
+install_tool() {
+  local what=$1
+  ensure_tool_exists "$what"
+  ensure_runtime_dirs
+  require_writable_repo
+  require_command git
+  require_command wget
+  bootstrap_composer_if_needed
+
+  echo "*** installing $highlight $what $normal"
+  bash -x "scripts/$what.install"
+  date > "installed/$what"
+}
+
+install_all() {
+  local what
+  ensure_runtime_dirs
+  require_writable_repo
+  require_command git
+  require_command wget
+  bootstrap_composer_if_needed
+
+  while IFS= read -r what
+  do
+    if [ -f "installed/$what" ]; then
+      echo "*** already installed: $what"
+    else
+      echo
+      install_tool "$what"
+    fi
+  done < <(list_available_tools)
+}
+
+update_self() {
+  ensure_runtime_dirs
+  require_writable_repo
+  require_command git
+
+  echo "*** updating $highlight self $normal"
+  git pull
+}
+
+update_tool() {
+  local what=$1
+  if [ "$what" = 'self' ]; then
+    update_self
+    return
+  fi
+
+  ensure_tool_exists "$what"
+  ensure_runtime_dirs
+  require_writable_repo
+  check_update_dependencies "$what"
+
+  if [ -f "scripts/$what.update" ]; then
+    echo "*** updating $highlight $what $normal"
+    bash -x "scripts/$what.update"
+  else
+    echo "*** re-installing $highlight $what $normal"
+    bash -x "scripts/$what.install"
+  fi
+  date > "installed/$what"
+}
+
+update_all() {
+  local file what
+  ensure_runtime_dirs
+  require_writable_repo
+  require_command git
+
+  set -- installed/*
+  if [ "$1" != 'installed/*' ]; then
+    for file in "$@"
+    do
+      what=${file#installed/}
+      if tool_exists "$what"; then
+        update_tool "$what"
+      else
+        echo "*** skipping unsupported installed marker: $what"
+      fi
+    done
+  fi
+
+  update_self
+}
+
+delete_tool_paths() {
+  case "$1" in
+    composer)
+      rm -f bin/composer installed/composer
+      ;;
+    phpDocumentor)
+      rm -f bin/phpDocumentor.phar installed/phpDocumentor
+      ;;
+    phpunit)
+      rm -f bin/phpunit installed/phpunit
+      ;;
+    psalm)
+      rm -f bin/psalm.phar installed/psalm
+      ;;
+    psysh)
+      rm -f bin/psysh installed/psysh
+      ;;
+    php-cs-fixer)
+      rm -f bin/php-cs-fixer installed/php-cs-fixer
+      rm -rf tools/php-cs-fixer
+      ;;
+    phpstan)
+      rm -f bin/phpstan installed/phpstan
+      rm -rf tools/phpstan
+      ;;
+    rector)
+      rm -f bin/rector installed/rector
+      rm -rf tools/rector
+      ;;
+    spartan-test)
+      rm -f bin/spartan-test bin/stest bin/stest-all installed/spartan-test
+      rm -rf tools/spartan-test
+      ;;
+    spartan-test-legacy)
+      rm -f installed/spartan-test-legacy
+      rm -rf tools/spartan-test-legacy
+      ;;
+    *)
+      echo "unknown tool '$1'"
+      exit 1
+      ;;
+  esac
+}
+
+delete_tool() {
+  ensure_runtime_dirs
+  require_writable_repo
+  ensure_tool_exists "$1"
+  echo "*** deleting $highlight $1 $normal"
+  delete_tool_paths "$1"
+}
+
+delete_all() {
+  local file what
+  ensure_runtime_dirs
+  require_writable_repo
+
+  set -- installed/*
+  if [ "$1" = 'installed/*' ] && [ ! -e tools/spartan-test-legacy ]; then
+    echo 'no installed packages to delete'
+    exit 0
+  fi
+
+  if [ "$1" != 'installed/*' ]; then
+    for file in "$@"
+    do
+      what=${file#installed/}
+      echo "*** deleting $highlight $what $normal"
+      delete_tool_paths "$what"
+    done
+  fi
+
+  if [ -e installed/spartan-test-legacy ] || [ -e tools/spartan-test-legacy ]; then
+    echo "*** deleting $highlight spartan-test-legacy $normal"
+    delete_tool_paths spartan-test-legacy
+  fi
+}
+
+usage() {
+  cat <<'EOF'
+usage:
+  php-tools list
+  php-tools install <tool|all>
+  php-tools update <tool|all|self>
+  php-tools delete <tool|all>
+EOF
+}
+
+action=${1:-}
+target=${2:-}
+
+case "$action" in
+  list)
+    if [ $# -ne 1 ]; then
+      usage
+      exit 1
+    fi
+    list_tools
+    ;;
+  install)
+    if [ -z "$target" ] || [ $# -ne 2 ]; then
+      usage
+      exit 1
+    fi
+    if [ "$target" = 'all' ]; then
+      install_all
+    else
+      install_tool "$target"
+    fi
+    ;;
+  update)
+    if [ -z "$target" ] || [ $# -ne 2 ]; then
+      usage
+      exit 1
+    fi
+    if [ "$target" = 'all' ]; then
+      update_all
+    else
+      update_tool "$target"
+    fi
+    ;;
+  delete)
+    if [ -z "$target" ] || [ $# -ne 2 ]; then
+      usage
+      exit 1
+    fi
+    if [ "$target" = 'all' ]; then
+      delete_all
+    else
+      delete_tool "$target"
+    fi
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

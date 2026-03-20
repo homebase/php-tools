@@ -2,19 +2,17 @@
 
 ## Summary
 
-`php-tools` is a small Bash-based toolbox for installing and updating a shared set of PHP developer tools outside application repositories. The project keeps tool binaries in `bin/`, installs Composer-managed packages under `tools/`, and records install/update timestamps in `installed/`.
+`php-tools` is a small Bash-based toolbox for listing, installing, updating, and deleting a shared set of PHP developer tools outside application repositories. The project keeps tool binaries in `bin/`, installs Composer-managed packages under `tools/`, and records install/update timestamps in `installed/`.
 
-The repository is centered on two entrypoints:
+The repository is centered on one entrypoint:
 
-- `install`: installs one tool or all known tools
-- `update`: updates one installed tool or all installed tools
+- `php-tools`: lists, installs, updates, and deletes managed tools
 
 It also includes helper scripts to expose the generated binaries through symlinks in `~/bin` or `/usr/local/bin`.
 
 ## Project Structure
 
-- `install`: main installer and package discovery entrypoint
-- `update`: main updater and reinstall fallback entrypoint
+- `php-tools`: main CLI entrypoint and package management dispatcher
 - `create-symlinks-local`: creates symlinks from `bin/*` into `~/bin`
 - `create-symlinks-global`: creates symlinks from `bin/*` into `/usr/local/bin`
 - `scripts/*.install`: per-tool installation commands
@@ -25,27 +23,18 @@ It also includes helper scripts to expose the generated binaries through symlink
 
 ## Current Behavior
 
-### Install Flow
+### CLI Flow
 
-`install` resolves its own path, changes into the repo root, checks for `git` and `wget`, and refuses to continue if the repo directory is not writable.
+`php-tools` resolves its own path, changes into the repo root, and dispatches one of four commands:
 
-If `bin/composer` does not exist, it bootstraps Composer first through `scripts/composer.install` by invoking it with `bash`. It then creates `bin/`, `tools/`, and `installed/`.
+- `list`: prints all available tools and marks installed ones
+- `install <tool|all>`: installs one tool or all known tools
+- `update <tool|all|self>`: updates one installed tool, all installed tools, or the `php-tools` repo itself
+- `delete <tool|all>`: removes one installed tool or all installed tools
 
-Behavior by argument:
+Mutating actions check that the repo directory is writable. Install also checks `git` and `wget`, and bootstraps `bin/composer` through `scripts/composer.install` when needed.
 
-- no args: lists all available `scripts/*.install` packages and marks already-installed items
-- `all`: iterates every `scripts/*.install` file and installs packages missing from `installed/`
-- `<tool>`: runs `scripts/<tool>.install` with `bash` and writes `installed/<tool>`
-
-### Update Flow
-
-`update` resolves its own path, changes into the repo root, creates `installed/`, and checks repo write permission.
-
-Behavior by argument:
-
-- no args: prints installed package names from `installed/`
-- `all`: iterates every file in `installed/` and runs `./update <tool>`
-- `<tool>`: runs `scripts/<tool>.update` with `bash` if present, otherwise falls back to `scripts/<tool>.install`, then rewrites `installed/<tool>`
+`update self` runs `git pull` in the repo checkout. `update all` updates installed tools and then performs the same self-update. Other tool updates use `scripts/<tool>.update` when present, otherwise fall back to `scripts/<tool>.install`. Delete removes tool-specific state directly from `bin/`, `tools/`, and `installed/`.
 
 ### Installation Methods by Tool
 
@@ -64,7 +53,7 @@ Behavior by argument:
 
 ### Symlink Helpers
 
-The symlink scripts assume they are run from the repo root and link every file under `bin/` into either `~/bin` or `/usr/local/bin`.
+The symlink scripts resolve the repo root from their own path and link every file under `bin/` plus the top-level `php-tools` command into either `~/bin` or `/usr/local/bin`.
 
 ## Practical Code Review
 
@@ -72,8 +61,8 @@ The symlink scripts assume they are run from the repo root and link every file u
 
 This review is based on the current tracked files in the repository:
 
-- top-level scripts: `install`, `update`, `create-symlinks-local`, `create-symlinks-global`
+- top-level scripts: `php-tools`, `create-symlinks-local`, `create-symlinks-global`
 - package scripts: all files under `scripts/`
 - documentation: `README.md` and `scripts/README.md`
 
-Shell syntax was checked earlier with `sh -n` against the script set before the Bash shebang update; the current entrypoints are Bash scripts and should be validated with `bash -n` in follow-up. `shellcheck` was not available in the environment during this review.
+Shell syntax should be validated with `bash -n` for the current entrypoints. `shellcheck` was not available in the environment during this review.

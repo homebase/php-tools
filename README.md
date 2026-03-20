@@ -3,7 +3,7 @@
 ## Set of commonly used php tools: psalm, codestyle fixer, phpdoc, ...
 so far compatible with php 7.4, php 8.0, php 8.1
 
-Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
+Package provides one command to install, update, delete, and list tools.
 
 **it is always a good idea to keep your tools and their dependencies in a separate place from your apps**
 
@@ -24,7 +24,7 @@ mkdir -p ~/src
 cd ~/src
 git clone https://github.com/homebase/php-tools.git
 cd php-tools
-./install all
+./php-tools install all
 ./create-symlinks-local
 ```
 
@@ -35,33 +35,34 @@ cd /usr/local/src
 sudo chown $USER /usr/local/src/php-tools
 git clone https://github.com/homebase/php-tools.git
 cd php-tools
-./install all
+./php-tools install all
 sudo ./create-symlinks-global
 ```
 
 
-## UPDATE all installed packages
-`~/bin/update-all-php-tools`
-or
-`/usr/local/bin/update-all-php-tools`
+## Commands
+* `php-tools list`            - list available tools and show installed ones
+* `php-tools install all`     - install all supported tools
+* `php-tools install $TOOL`   - install one tool
+* `php-tools update all`      - update installed tools
+* `php-tools update self`     - update the `php-tools` repo with `git pull`
+* `php-tools update $TOOL`    - update one tool
+* `php-tools delete all`      - delete installed tools
+* `php-tools delete $TOOL`    - delete one tool
 
-## Advanced use - install some packages / update specific ones
-* `install`                 - get help, list of available packages
-* `install all`             - install ALL
-* `install $TOOL`           - install specific tool
-* `update  all`             - update installed packages
-* `update  $TOOL`           - update specific tool
-
-after `install` *choose **one** method out of*:
+after `php-tools install` *choose **one** method out of*:
 * add checked out `bin` directory to your PATH
+* add checked out repo root to your PATH if you want direct `php-tools` access
 * `create-symlinks-local`   - create tools symlinks in ~/bin (your home directory)
 * `create-symlinks-global`  - create tools symlinks in /usr/local/bin
 
 ### Operational Notes
-* run the top-level scripts from the repo root: `./install`, `./update`, `./create-symlinks-local`, `./create-symlinks-global`
-* the repo checkout must be writable for install and update operations
-* `update all` only updates tools recorded in `installed/`
-* if nothing has been installed yet, `update all` prints `no installed packages to update` and exits successfully
+* run the top-level commands from the repo root: `./php-tools`, `./create-symlinks-local`, `./create-symlinks-global`
+* the repo checkout must be writable for install, update, and delete operations
+* `php-tools update self` runs `git pull` in the repo checkout
+* `php-tools update all` updates installed tools and also runs the self-update
+* `php-tools delete all` deletes installed tools and also cleans stale local `spartan-test-legacy` state if present
+* if nothing has been installed yet, `php-tools delete all` prints `no installed packages to delete` and exits successfully
 
 ### Required Tools
 * bash
