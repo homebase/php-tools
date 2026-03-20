@@ -8,13 +8,13 @@ The repository is centered on one entrypoint:
 
 - `php-tools`: lists, installs, updates, and deletes managed tools
 
-It also includes helper scripts to expose the generated binaries through symlinks in `~/bin` or `/usr/local/bin`.
+It also includes a `php-tools symlink` command to expose the generated binaries through symlinks in `~/bin` or `/usr/local/bin`.
 
 ## Project Structure
 
 - `php-tools`: main CLI entrypoint and package management dispatcher
-- `create-symlinks-local`: creates symlinks from `bin/*` into `~/bin`
-- `create-symlinks-global`: creates symlinks from `bin/*` into `/usr/local/bin`
+- `php-tools symlink local`: creates symlinks from `bin/*` into `~/bin`
+- `php-tools symlink global`: creates symlinks from `bin/*` into `/usr/local/bin`
 - `scripts/*.install`: per-tool installation commands
 - `scripts/*.update`: per-tool update commands when the project supports in-place updates
 - `bin/`: generated executables or symlinks to executables under `tools/`
@@ -55,7 +55,7 @@ Mutating actions check that the repo directory is writable. Install also checks 
 
 ### Symlink Helpers
 
-The symlink scripts resolve the repo root from their own path and link every file under `bin/` plus the top-level `php-tools` command into either `~/bin` or `/usr/local/bin`.
+The symlink command resolves the repo root from its own path and links every file under `bin/` plus the top-level `php-tools` command into either `~/bin` or `/usr/local/bin`.
 
 ## Practical Code Review
 
@@ -63,7 +63,7 @@ The symlink scripts resolve the repo root from their own path and link every fil
 
 This review is based on the current tracked files in the repository:
 
-- top-level scripts: `php-tools`, `create-symlinks-local`, `create-symlinks-global`
+- top-level script: `php-tools`
 - package scripts: all files under `scripts/`
 - documentation: `README.md` and `scripts/README.md`
 

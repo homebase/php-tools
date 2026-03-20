@@ -27,7 +27,7 @@ cd ~/src
 git clone https://github.com/homebase/php-tools.git
 cd php-tools
 ./php-tools install all
-./create-symlinks-local
+./php-tools symlink local
 ```
 
 ## INSTALL (GLOBAL)
@@ -38,7 +38,7 @@ sudo chown $USER /usr/local/src/php-tools
 git clone https://github.com/homebase/php-tools.git
 cd php-tools
 ./php-tools install all
-sudo ./create-symlinks-global
+sudo ./php-tools symlink global
 ```
 
 
@@ -51,20 +51,23 @@ sudo ./create-symlinks-global
 * `php-tools update $TOOL`    - update one tool
 * `php-tools delete all`      - delete installed tools
 * `php-tools delete $TOOL`    - delete one tool
+* `php-tools symlink local`   - create tools symlinks in `~/bin`
+* `php-tools symlink global`  - create tools symlinks in `/usr/local/bin`
 
 after `php-tools install` *choose **one** method out of*:
 * add checked out `bin` directory to your PATH
 * add checked out repo root to your PATH if you want direct `php-tools` access
-* `create-symlinks-local`   - create tools symlinks in ~/bin (your home directory)
-* `create-symlinks-global`  - create tools symlinks in /usr/local/bin
+* `php-tools symlink local`   - create tools symlinks in `~/bin`
+* `php-tools symlink global`  - create tools symlinks in `/usr/local/bin`
 
 ### Operational Notes
-* run the top-level commands from the repo root: `./php-tools`, `./create-symlinks-local`, `./create-symlinks-global`
+* run the top-level command from the repo root: `./php-tools`
 * the repo checkout must be writable for install, update, and delete operations
 * `php-tools update self` runs `git pull` in the repo checkout
 * `php-tools update all` updates installed tools and also runs the self-update
 * `php-tools delete all` deletes installed tools and also cleans stale local `spartan-test-legacy` state if present
 * if nothing has been installed yet, `php-tools delete all` prints `no installed packages to delete` and exits successfully
+* `php-tools symlink global` must be run as root
 
 ### Required Tools
 * bash

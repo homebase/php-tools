@@ -277,6 +277,36 @@ delete_all() {
   fi
 }
 
+create_symlinks() {
+  local target_dir=$1
+  local file
+
+  mkdir -p "$target_dir"
+
+  set -- bin/*
+  if [ -e "$1" ]; then
+    for file in "$@"
+    do
+      ln -s "$repo_dir/$file" "$target_dir"
+    done
+  fi
+
+  ln -s "$repo_dir/php-tools" "$target_dir"
+}
+
+create_local_symlinks() {
+  create_symlinks "$HOME/bin"
+}
+
+create_global_symlinks() {
+  if [ "$EUID" -ne 0 ]; then
+    echo 'Please run as root'
+    exit 1
+  fi
+
+  create_symlinks /usr/local/bin
+}
+
 usage() {
   cat <<'EOF'
 usage:
@@ -284,6 +314,7 @@ usage:
   php-tools install <tool|all>
   php-tools update <tool|all|self>
   php-tools delete <tool|all>
+  php-tools symlink <local|global>
 EOF
 }
 
@@ -329,6 +360,21 @@ case "$action" in
       delete_all
     else
       delete_tool "$target"
+    fi
+    ;;
+  symlink)
+    if [ -z "$target" ] || [ $# -ne 2 ]; then
+      usage
+      exit 1
+    fi
+    set -x
+    if [ "$target" = 'local' ]; then
+      create_local_symlinks
+    elif [ "$target" = 'global' ]; then
+      create_global_symlinks
+    else
+      usage
+      exit 1
     fi
     ;;
   *)
