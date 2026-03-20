@@ -1,0 +1,4 @@
+mkdir --parents tools/pest
+bin/composer require --working-dir=tools/pest --dev pestphp/pest --with-all-dependencies
+ln -sf ../tools/pest/vendor/bin/pest bin
+./bin/pest --version

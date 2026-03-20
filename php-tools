@@ -87,7 +87,7 @@ check_update_dependencies() {
     self)
       require_command git
       ;;
-    composer|php-cs-fixer|phpstan|rector)
+    composer|mago|pest|php-cs-fixer|phpstan|rector)
       require_local_composer
       ;;
     spartan-test)
@@ -202,6 +202,14 @@ delete_tool_paths() {
     php-cs-fixer)
       rm -f bin/php-cs-fixer installed/php-cs-fixer
       rm -rf tools/php-cs-fixer
+      ;;
+    mago)
+      rm -f bin/mago installed/mago
+      rm -rf tools/mago
+      ;;
+    pest)
+      rm -f bin/pest installed/pest
+      rm -rf tools/pest
       ;;
     phpstan)
       rm -f bin/phpstan installed/phpstan

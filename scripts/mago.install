@@ -1,0 +1,4 @@
+mkdir --parents tools/mago
+bin/composer require --working-dir=tools/mago --dev carthage-software/mago
+ln -sf ../tools/mago/vendor/bin/mago bin
+./bin/mago --version

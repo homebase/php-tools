@@ -9,6 +9,8 @@ Package provides one command to install, update, delete, and list tools.
 
 ## Provided Tools:
 * [composer](https://getcomposer.org/download/)
+* [mago](https://mago.carthage.software/guide/installation)
+* [pest](https://pestphp.com/docs/installation)
 * [psalm](https://psalm.dev/docs/annotating_code/supported_annotations/)
 * [php-stan](https://phpstan.org/writing-php-code/phpdocs-basics)
 * [rector](https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md)
@@ -70,8 +72,8 @@ after `php-tools install` *choose **one** method out of*:
 * git
 
 
-## php 7.4 compatibility note
-as of this moment all provided tools are compatible
+## PHP compatibility note
+Most tools in this repo can still be managed for older PHP versions, but Pest currently requires PHP 8.3+ according to the official installation docs.
 
 ## See Also
  please check [parf/composer-php8-template](https://github.com/parf/composer-php8-template) project that provides default configs for above tools

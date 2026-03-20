@@ -45,6 +45,8 @@ Mutating actions check that the repo directory is writable. Install also checks 
   - `psalm`
   - `psysh`
 - Composer project under `tools/` with a symlink into `bin/`:
+  - `mago`
+  - `pest`
   - `php-cs-fixer`
   - `phpstan`
   - `rector`
