@@ -12,6 +12,7 @@ repo_dir=$(pwd)
 # bold+cyan+on_orange
 highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
 normal=$(tput sgr0)
+PHP_TOOLS_RAN_AS_OWNER=0
 
 require_command() {
   local name=$1
@@ -19,6 +20,67 @@ require_command() {
     echo "Error: $name is not installed." >&2
     exit 1
   fi
+}
+
+is_global_repo() {
+  [ "$repo_dir" = '/usr/local/src/php-tools' ]
+}
+
+repo_owner_user() {
+  stat -c '%U' "$repo_dir"
+}
+
+resolve_global_run_user() {
+  local owner user_name
+
+  user_name=${USER:-}
+  if [ -n "$user_name" ] && [ "$user_name" != 'root' ] && getent passwd "$user_name" >/dev/null; then
+    echo "$user_name"
+    return 0
+  fi
+
+  owner=$(repo_owner_user)
+  if [ "$owner" != 'root' ]; then
+    echo "$owner"
+    return 0
+  fi
+
+  if getent passwd dev >/dev/null; then
+    echo 'dev'
+    return 0
+  fi
+
+  echo "Error: no non-root owner is configured for $repo_dir." >&2
+  echo "Re-run with an explicit user, for example: ${highlight}USER=name \"$0\" $* ${normal}" >&2
+  return 1
+}
+
+run_as_repo_owner_if_needed() {
+  local target_user quoted_args
+
+  if [ "${PHP_TOOLS_REEXECED_AS_OWNER:-0}" = '1' ]; then
+    return
+  fi
+
+  if ! is_global_repo || [ "$EUID" -ne 0 ]; then
+    return
+  fi
+
+  if ! target_user=$(resolve_global_run_user "$@"); then
+    exit 1
+  fi
+
+  if [ "$(repo_owner_user)" != "$target_user" ]; then
+    chown -R "$target_user" "$repo_dir"
+  fi
+
+  printf -v quoted_args '%q ' "$@"
+  su -s /bin/bash "$target_user" -c "cd $(printf '%q' "$repo_dir") && PHP_TOOLS_REEXECED_AS_OWNER=1 USER=$(printf '%q' "$target_user") ./php-tools ${quoted_args}"
+  exit_code=$?
+  if [ "$exit_code" -ne 0 ]; then
+    exit "$exit_code"
+  fi
+  PHP_TOOLS_RAN_AS_OWNER=1
 }
 
 require_writable_repo() {
@@ -287,11 +349,11 @@ create_symlinks() {
   if [ -e "$1" ]; then
     for file in "$@"
     do
-      ln -s "$repo_dir/$file" "$target_dir"
+      ln -sf "$repo_dir/$file" "$target_dir"
     done
   fi
 
-  ln -s "$repo_dir/php-tools" "$target_dir"
+  ln -sf "$repo_dir/php-tools" "$target_dir"
 }
 
 create_local_symlinks() {
@@ -305,6 +367,14 @@ create_global_symlinks() {
   fi
 
   create_symlinks /usr/local/bin
+}
+
+auto_symlink_after_install() {
+  if is_global_repo; then
+    create_global_symlinks
+  else
+    create_local_symlinks
+  fi
 }
 
 usage() {
@@ -334,16 +404,26 @@ case "$action" in
       usage
       exit 1
     fi
+    run_as_repo_owner_if_needed "$@"
+    if [ "$PHP_TOOLS_RAN_AS_OWNER" = '1' ]; then
+      auto_symlink_after_install
+      exit 0
+    fi
     if [ "$target" = 'all' ]; then
       install_all
     else
       install_tool "$target"
     fi
+    auto_symlink_after_install
     ;;
   update)
     if [ -z "$target" ] || [ $# -ne 2 ]; then
       usage
       exit 1
+    fi
+    run_as_repo_owner_if_needed "$@"
+    if [ "$PHP_TOOLS_RAN_AS_OWNER" = '1' ]; then
+      exit 0
     fi
     if [ "$target" = 'all' ]; then
       update_all
@@ -355,6 +435,10 @@ case "$action" in
     if [ -z "$target" ] || [ $# -ne 2 ]; then
       usage
       exit 1
+    fi
+    run_as_repo_owner_if_needed "$@"
+    if [ "$PHP_TOOLS_RAN_AS_OWNER" = '1' ]; then
+      exit 0
     fi
     if [ "$target" = 'all' ]; then
       delete_all
