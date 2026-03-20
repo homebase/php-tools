@@ -1,4 +1,8 @@
 mkdir --parents tools/pest
+if [ ! -f tools/pest/composer.json ]; then
+  bin/composer init --working-dir=tools/pest --name=homebase/pest-tools --no-interaction
+fi
+bin/composer config --working-dir=tools/pest --no-plugins allow-plugins.pestphp/pest-plugin true
 bin/composer require --working-dir=tools/pest --dev pestphp/pest --with-all-dependencies
 ln -sf ../tools/pest/vendor/bin/pest bin
-./bin/pest --version
+bin/composer show --working-dir=tools/pest pestphp/pest

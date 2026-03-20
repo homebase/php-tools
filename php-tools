@@ -106,7 +106,10 @@ install_tool() {
   bootstrap_composer_if_needed
 
   echo "*** installing $highlight $what $normal"
-  bash -x "scripts/$what.install"
+  if ! bash -x "scripts/$what.install"; then
+    echo "Error: install failed for '$what'." >&2
+    return 1
+  fi
   date > "installed/$what"
 }
 
@@ -124,7 +127,7 @@ install_all() {
       echo "*** already installed: $what"
     else
       echo
-      install_tool "$what"
+      install_tool "$what" || return 1
     fi
   done < <(list_available_tools)
 }
@@ -152,10 +155,16 @@ update_tool() {
 
   if [ -f "scripts/$what.update" ]; then
     echo "*** updating $highlight $what $normal"
-    bash -x "scripts/$what.update"
+    if ! bash -x "scripts/$what.update"; then
+      echo "Error: update failed for '$what'." >&2
+      return 1
+    fi
   else
     echo "*** re-installing $highlight $what $normal"
-    bash -x "scripts/$what.install"
+    if ! bash -x "scripts/$what.install"; then
+      echo "Error: update failed for '$what'." >&2
+      return 1
+    fi
   fi
   date > "installed/$what"
 }
@@ -172,7 +181,7 @@ update_all() {
     do
       what=${file#installed/}
       if tool_exists "$what"; then
-        update_tool "$what"
+        update_tool "$what" || return 1
       else
         echo "*** skipping unsupported installed marker: $what"
       fi
