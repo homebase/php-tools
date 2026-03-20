@@ -36,7 +36,7 @@ cd php-tools
 
 ↳ After that first install, `php-tools` is on your `PATH`.
 
-### Global-style install under `/usr/local/src/php-tools`
+### Global install tools in `/usr/local/bin` (`/usr/local/src/php-tools`)
 
 ```bash
 sudo mkdir -p /usr/local/src/php-tools
