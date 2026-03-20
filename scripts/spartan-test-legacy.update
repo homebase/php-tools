@@ -1,3 +1,0 @@
-#!/bin/sh
-cd tools/spartan-test-legacy
-git pull

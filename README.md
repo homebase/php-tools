@@ -16,8 +16,7 @@ Package provides scripts to INSTALL and UPDATE (all tools or specific ones)
 * [php-cs-fixer](https://mlocati.github.io/php-cs-fixer-configurator/#version:3.8)
 * [php-unit](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html)
 * [psysh](https://developpaper.com/psysh-php-interactive-console/)
-* [spartan-test (mainline)](https://github.com/parf/spartan-test)
-* [spartan-test (legacy)](https://github.com/parf/spartan-test/tree/V1)
+* [spartan-test](https://github.com/parf/spartan-test)
 
 ## INSTALL (LOCAL)
 ```
@@ -58,9 +57,15 @@ after `install` *choose **one** method out of*:
 * `create-symlinks-local`   - create tools symlinks in ~/bin (your home directory)
 * `create-symlinks-global`  - create tools symlinks in /usr/local/bin
 
+### Operational Notes
+* run the top-level scripts from the repo root: `./install`, `./update`, `./create-symlinks-local`, `./create-symlinks-global`
+* the repo checkout must be writable for install and update operations
+* `update all` only updates tools recorded in `installed/`
+* if nothing has been installed yet, `update all` prints `no installed packages to update` and exits successfully
+
 ### Required Tools
+* bash
 * wget
-* composer
 * git
 
 

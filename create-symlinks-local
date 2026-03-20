@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo 'Error: this script must be run with bash.' >&2
+  exit 1
+fi
+
+F=$(readlink -f "$0")
+cd "$(dirname "$F")"
+repo_dir=$(pwd)
+
 set -x
 
 #
@@ -6,9 +16,8 @@ set -x
 # will not overwrite existing ones
 #
 
-pwd=$(pwd)
 mkdir -p ~/bin
 for file in bin/*
 do
-  ln -s $pwd/$file ~/bin
+  ln -s "$repo_dir/$file" ~/bin
 done

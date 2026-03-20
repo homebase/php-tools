@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo 'Error: this script must be run with bash.' >&2
+  exit 1
+fi
+
 F=$(readlink -f "$0")
 cd "$(dirname "$F")"
+repo_dir=$(dirname "$F")
 
 # bold+cyan+on_orange
 highlight=$(tput setab 3)$(tput bold)$(tput setaf 4)
@@ -23,24 +29,25 @@ fi
 
 if [ ! -w . ]; then
    echo Error: Write Permission Denied
-   echo Option 1: run from root: $highlight sudo $0 $* $normal
-   echo Option 2: change file ownership: $highlight sudo chown -R $USER $(dirname "$F") $normal, then run update command again
+   echo "Option 1: run from root: ${highlight}sudo \"$0\" $* ${normal}"
+   echo "Option 2: change file ownership: ${highlight}sudo chown -R ${USER:-$LOGNAME} \"$repo_dir\" ${normal}, then run install command again"
    exit 1
 fi
+
+mkdir -p bin tools installed
 
 if [ ! -f bin/composer ]; then
    bash ./scripts/composer.install
 fi
-
-mkdir -p bin tools installed
 
 if [ $# -eq 0 ]; then
     echo 'specify "all" or choose a specific package to install / re-install'
     echo
     for file in scripts/*.install
     do
-        what=$(echo $file | sed "s/scripts.//" | sed "s/.install$//")
-        if [ -f installed/$what ]; then
+        what=${file#scripts/}
+        what=${what%.install}
+        if [ -f "installed/$what" ]; then
             echo "- $highlight $what $normal - already installed"
         else
             echo "- $highlight $what $normal"
@@ -54,22 +61,23 @@ what=$1
 if [ "$1" == "all" ]; then
     for file in scripts/*.install
     do
-        what=$(echo $file | sed "s/scripts.//" | sed "s/.install$//")
-        if [ -f installed/$what ]; then
+        what=${file#scripts/}
+        what=${what%.install}
+        if [ -f "installed/$what" ]; then
             echo "*** already installed: $what"
         else
             echo
-            ./install $what
+            ./install "$what"
         fi
     done
     exit
 fi
 
-if [ ! -f scripts/$what.install ]; then
+if [ ! -f "scripts/$what.install" ]; then
     echo "unknown package '$what'"
     exit 1
 fi
 
 echo "*** installing $highlight $what $normal"
-bash -x scripts/$what.install
-date > installed/$what
+bash -x "scripts/$what.install"
+date > "installed/$what"

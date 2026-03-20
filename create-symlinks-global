@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo 'Error: this script must be run with bash.' >&2
+  exit 1
+fi
+
+F=$(readlink -f "$0")
+cd "$(dirname "$F")"
+repo_dir=$(pwd)
+
 set -x
 
 #
@@ -11,9 +21,8 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-pwd=$(pwd)
 mkdir -p /usr/local/bin
 for file in bin/*
 do
-  ln -s $pwd/$file /usr/local/bin
+  ln -s "$repo_dir/$file" /usr/local/bin
 done
