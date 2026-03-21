@@ -370,6 +370,10 @@ create_global_symlinks() {
 }
 
 auto_symlink_after_install() {
+  if [ "${PHP_TOOLS_REEXECED_AS_OWNER:-0}" = '1' ]; then
+    return
+  fi
+
   if is_global_repo; then
     create_global_symlinks
   else
