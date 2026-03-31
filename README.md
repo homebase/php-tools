@@ -75,6 +75,7 @@ For `/usr/local/src/php-tools`, mutating commands try to run as the checkout own
 ## Compatibility Notes
 
 - Want the latest tool versions? Use PHP 8.5 or newer.
+- This toolchain is intended to work with PHP 8.5 projects, including [`parf/composer-php85-template`](https://github.com/parf/composer-php85-template).
 - Most tools here still work with older PHP versions, but Pest requires PHP 8.3+.
 
 ## See Also
