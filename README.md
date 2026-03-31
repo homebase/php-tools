@@ -79,4 +79,4 @@ For `/usr/local/src/php-tools`, mutating commands try to run as the checkout own
 
 ## See Also
 
-[parf/composer-php8-template](https://github.com/parf/composer-php8-template) → starter config for several of the tools managed here.
+[parf/composer-php85-template](https://github.com/parf/composer-php85-template) → starter config for several of the tools managed here.
